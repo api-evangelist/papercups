@@ -1,0 +1,58 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Papercups
+providerId: papercups
+created: '2026-06-20'
+modified: '2026-06-20'
+reconciled: false
+tags:
+- Customer Messaging
+- Live Chat
+- Open Source
+- Support
+- Intercom Alternative
+- Rate Limiting
+- Quotas
+- Throttling
+description: >-
+  Papercups does not publish formal, numeric API rate limits. Because it is
+  open-source Elixir/Phoenix software that is typically self-hosted, effective
+  throughput is bounded by the operator's own infrastructure, BEAM VM
+  configuration, and any reverse-proxy throttling the operator places in front
+  of the app. The hosted instance may apply its own limits, but these are not
+  documented. Specific values are not reconciled in this artifact.
+notes: >-
+  No documented per-endpoint or per-account rate limits were found in the
+  Papercups docs or repository. The project is in maintenance mode; self-hosted
+  operators control their own limits. Verify any hosted-instance limits with
+  the provider during reconciliation.
+sources:
+- https://docs.papercups.io/api-endpoints
+- https://github.com/papercups-io/papercups
+responseCodes:
+  throttled: 429
+limits:
+- name: REST API Requests
+  scope: account
+  metric: requests
+  limit: not documented
+  notes: No published numeric limit; bounded by self-hosted infrastructure or undocumented hosted limits.
+- name: WebSocket Connections (Phoenix Channels)
+  scope: account
+  metric: connections
+  limit: not documented
+  notes: Bounded by BEAM VM and operator configuration; no published cap.
+- name: Webhook Delivery
+  scope: account
+  metric: events
+  limit: not documented
+  notes: Outbound webhook delivery rate follows event volume; no published throttle.
+policies:
+- name: Self-Hosted Control
+  description: Operators set their own limits via reverse proxy, load balancer, or Phoenix configuration.
+- name: Backoff Strategy
+  description: Clients should implement exponential backoff with jitter and honor Retry-After if a 429 is returned.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

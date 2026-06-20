@@ -1,0 +1,220 @@
+asyncapi: '2.6.0'
+id: 'urn:io:papercups:realtime:chat:websocket'
+info:
+  title: Papercups Realtime Chat (WebSocket / Phoenix Channels)
+  version: '1.0.0'
+  description: |
+    AsyncAPI 2.6 description of Papercups' **realtime live chat** surface.
+
+    Unlike many providers, Papercups exposes a genuine, bidirectional
+    **WebSocket** transport: the chat widget and agent dashboard connect to a
+    Phoenix Channels socket and exchange messages in both directions. This is
+    documented at https://docs.papercups.io/chat and described in the
+    open-source codebase at https://github.com/papercups-io/papercups.
+
+    Phoenix Channels multiplex many logical topics over a single WebSocket
+    connection at `/socket/websocket`. A customer typically joins three
+    channels while interacting with live chat:
+
+      * `conversation:{conversation_id}` - all messages for a given conversation
+        are broadcast here; clients send/receive the `shout` event (a new
+        message) and `messages:seen` (read receipts).
+      * `conversation:lobby:{customer_id}` - notifies the customer of new
+        conversations initiated by agents.
+      * `room:{account_id}` - broadcasts agent availability via Phoenix
+        Presence.
+
+    Phoenix wraps every frame in a 5-element message envelope
+    `[join_ref, ref, topic, event, payload]`. The lifecycle events
+    `phx_join`, `phx_reply`, `phx_close`, `phx_error`, and `heartbeat`
+    (on the `phoenix` topic) are part of the Phoenix Channels protocol.
+
+    Papercups is in maintenance mode (community-maintained); the realtime
+    surface reflects the documented and open-source behavior at time of review.
+  contact:
+    name: API Evangelist
+    email: kin@apievangelist.com
+    url: https://apievangelist.com
+  license:
+    name: MIT
+    url: https://github.com/papercups-io/papercups/blob/master/LICENSE
+  x-transport-notes:
+    transport: WebSocket (Phoenix Channels)
+    protocol: wss
+    direction: bidirectional
+    socketPath: /socket/websocket
+    envelope: '[join_ref, ref, topic, event, payload]'
+    heartbeat: 'event "heartbeat" on topic "phoenix" every ~30s'
+    source: https://docs.papercups.io/chat
+defaultContentType: application/json
+servers:
+  papercups-hosted:
+    url: app.papercups.io/socket/websocket
+    protocol: wss
+    description: |
+      Papercups hosted Phoenix Channels WebSocket endpoint. Self-hosted
+      deployments expose the same `/socket/websocket` path on their own host.
+      Connection params (e.g. customer or API token) are supplied as query
+      params on the socket URL per Phoenix Channels conventions.
+channels:
+  'conversation:{conversation_id}':
+    description: |
+      Per-conversation channel. After `phx_join`, clients send new messages
+      with the `shout` event and read receipts with `messages:seen`, and
+      receive the same events broadcast from other participants (agent or
+      customer).
+    parameters:
+      conversation_id:
+        description: The conversation UUID.
+        schema:
+          type: string
+    bindings:
+      ws:
+        bindingVersion: '0.1.0'
+    publish:
+      operationId: sendShout
+      summary: Send a message (and read receipts) into the conversation.
+      message:
+        oneOf:
+          - $ref: '#/components/messages/Shout'
+          - $ref: '#/components/messages/MessagesSeen'
+          - $ref: '#/components/messages/PhxJoin'
+    subscribe:
+      operationId: receiveConversationEvents
+      summary: Receive broadcast messages and acknowledgements.
+      message:
+        oneOf:
+          - $ref: '#/components/messages/Shout'
+          - $ref: '#/components/messages/MessagesSeen'
+          - $ref: '#/components/messages/PhxReply'
+  'conversation:lobby:{customer_id}':
+    description: |
+      Lobby channel through which a customer is notified of new conversations
+      started by agents.
+    parameters:
+      customer_id:
+        description: The customer UUID.
+        schema:
+          type: string
+    bindings:
+      ws:
+        bindingVersion: '0.1.0'
+    subscribe:
+      operationId: receiveLobbyEvents
+      summary: Receive new-conversation notifications.
+      message:
+        $ref: '#/components/messages/Shout'
+  'room:{account_id}':
+    description: |
+      Account room channel used to broadcast agent availability via Phoenix
+      Presence.
+    parameters:
+      account_id:
+        description: The account UUID.
+        schema:
+          type: string
+    bindings:
+      ws:
+        bindingVersion: '0.1.0'
+    subscribe:
+      operationId: receivePresence
+      summary: Receive Phoenix Presence state and diffs for agent availability.
+      message:
+        oneOf:
+          - $ref: '#/components/messages/PresenceState'
+          - $ref: '#/components/messages/PresenceDiff'
+  phoenix:
+    description: |
+      Phoenix heartbeat topic. Clients send a `heartbeat` event roughly every
+      30 seconds to keep the socket alive.
+    bindings:
+      ws:
+        bindingVersion: '0.1.0'
+    publish:
+      operationId: sendHeartbeat
+      summary: Keep the WebSocket connection alive.
+      message:
+        $ref: '#/components/messages/Heartbeat'
+components:
+  messages:
+    Shout:
+      name: shout
+      title: New message (shout)
+      summary: A new chat message broadcast to a conversation channel.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/PhoenixEnvelope'
+      examples:
+        - name: customerMessage
+          payload:
+            - null
+            - '3'
+            - 'conversation:1a2b3c'
+            - shout
+            - body: 'Hi, I need help with my order'
+              customer_id: 'cus_123'
+              conversation_id: '1a2b3c'
+    MessagesSeen:
+      name: messages:seen
+      title: Read receipt
+      summary: Marks agent messages in the conversation as seen.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/PhoenixEnvelope'
+    PhxJoin:
+      name: phx_join
+      title: Join channel
+      summary: Phoenix channel join request.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/PhoenixEnvelope'
+    PhxReply:
+      name: phx_reply
+      title: Channel reply
+      summary: Phoenix acknowledgement reply (status ok/error).
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/PhoenixEnvelope'
+    PresenceState:
+      name: presence_state
+      title: Presence state
+      summary: Full Phoenix Presence state for agent availability.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/PhoenixEnvelope'
+    PresenceDiff:
+      name: presence_diff
+      title: Presence diff
+      summary: Incremental Phoenix Presence join/leave diff.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/PhoenixEnvelope'
+    Heartbeat:
+      name: heartbeat
+      title: Heartbeat
+      summary: Phoenix socket keepalive on the `phoenix` topic.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/PhoenixEnvelope'
+  schemas:
+    PhoenixEnvelope:
+      type: array
+      description: >-
+        Phoenix Channels v2 serializer envelope:
+        [join_ref, ref, topic, event, payload].
+      minItems: 5
+      maxItems: 5
+      items:
+        - description: join_ref
+          type: string
+          nullable: true
+        - description: ref
+          type: string
+          nullable: true
+        - description: topic
+          type: string
+        - description: event
+          type: string
+        - description: payload
+          type: object
+          additionalProperties: true

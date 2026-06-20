@@ -1,0 +1,84 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Papercups
+providerId: papercups
+created: '2026-06-20'
+modified: '2026-06-20'
+reconciled: false
+tags:
+- Customer Messaging
+- Live Chat
+- Open Source
+- Support
+- Intercom Alternative
+- Plans
+description: >-
+  Papercups is open-source software (MIT) that can be self-hosted at no
+  license cost; the REST API, realtime WebSocket chat, and webhooks are all
+  available on a self-hosted deployment with no per-call charge from the
+  project. A hosted version historically ran at app.papercups.io with free and
+  paid tiers, but the project is now in maintenance mode (community-maintained,
+  no major new features) and current hosted-tier availability and pricing are
+  not reliably published, so paid-tier details are not reconciled here.
+notes: >-
+  Papercups is in maintenance mode per its GitHub README: "there won't be any
+  major new features in the near future. We will still accept pull requests and
+  conduct major bug fixes." Self-hosting is free under MIT. Any hosted SaaS
+  tiers, trial limits, and seat pricing should be verified against papercups.io
+  during reconciliation; treat all paid amounts below as unconfirmed.
+sources:
+- https://papercups.io
+- https://github.com/papercups-io/papercups
+- https://docs.papercups.io
+plans:
+- id: papercups-self-hosted
+  name: Self-Hosted (Open Source)
+  type: free
+  description: >-
+    Run Papercups on your own infrastructure under the MIT license. No license
+    fee; you pay only your own hosting costs. Full access to the REST API,
+    Phoenix WebSocket realtime chat, and webhooks.
+  entries:
+  - label: Self-Hosted License
+    name: self_hosted
+    type: flat
+    metric: license
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $0 (MIT, self-hosted)
+    userMultiplied: false
+  elements:
+  - name: Conversations API
+  - name: Messages API
+  - name: Customers API
+  - name: Realtime Chat (WebSocket / Phoenix Channels)
+  - name: Webhooks
+- id: papercups-hosted
+  name: Hosted (SaaS)
+  type: usage
+  description: >-
+    Historically a managed hosted offering at app.papercups.io with free and
+    paid tiers. Current availability and pricing are not reliably published
+    given maintenance-mode status; values are unconfirmed and unreconciled.
+  entries:
+  - label: Hosted Plan
+    name: hosted
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: unknown - verify at papercups.io (maintenance mode)
+    userMultiplied: false
+  elements:
+  - name: Managed Hosting
+  - name: Conversations API
+  - name: Messages API
+  - name: Customers API
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

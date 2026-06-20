@@ -1,0 +1,98 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Papercups
+providerId: papercups
+created: '2026-06-20'
+modified: '2026-06-20'
+reconciled: false
+tags:
+- Customer Messaging
+- Live Chat
+- Open Source
+- Support
+- Intercom Alternative
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of Papercups spend. As open-source (MIT) self-hostable software,
+  Papercups has no per-call API charges from the project; the dominant cost is
+  the infrastructure required to operate it (compute, database, storage,
+  bandwidth) plus engineering time to deploy and maintain it. There is no
+  vendor invoice in the self-hosted model, so FinOps focus shifts to internal
+  cloud-resource cost allocation rather than provider metering. Any hosted SaaS
+  spend is unconfirmed given the project's maintenance-mode status.
+notes: >-
+  Papercups is in maintenance mode and self-hosted by default; cost meters
+  below describe self-hosting infrastructure, not provider-billed usage.
+  Verify any hosted-tier billing against papercups.io during reconciliation.
+sources:
+- https://papercups.io
+- https://github.com/papercups-io/papercups
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Papercups
+serviceCategory: Customer Engagement and Support
+billingModel:
+  pricingCategory: Open Source (Self-Hosted)
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Usage
+  - Purchase
+focusColumns:
+  ServiceName: Papercups
+  ServiceCategory: Customer Engagement and Support
+  ProviderName: Papercups
+  PublisherName: Papercups
+  InvoiceIssuerName: Self-Hosted Infrastructure Provider
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  PricingCategory: Open Source (Self-Hosted)
+meters:
+- name: compute_hours
+  description: Hours of compute running the Elixir/Phoenix application server and BEAM VM.
+  unit: hours
+  aggregation: sum
+  dimensions:
+  - account
+  - environment
+- name: database_storage
+  description: PostgreSQL storage for conversations, messages, and customers.
+  unit: gigabytes
+  aggregation: max
+  dimensions:
+  - account
+  - environment
+- name: bandwidth
+  description: Egress bandwidth for the chat widget, REST API, and WebSocket traffic.
+  unit: gigabytes
+  aggregation: sum
+  dimensions:
+  - account
+  - environment
+- name: websocket_connections
+  description: Concurrent Phoenix Channels WebSocket connections, a driver of memory and compute sizing.
+  unit: connections
+  aggregation: max
+  dimensions:
+  - account
+  - environment
+principles:
+- name: Visibility
+  description: Tag the cloud resources (compute, DB, storage) that run Papercups so self-hosting cost is attributable.
+- name: Allocation
+  description: Map infrastructure spend to the support/CX team or cost center that owns the deployment.
+- name: Optimization
+  description: Right-size compute and database for concurrent WebSocket load; scale BEAM nodes horizontally only as needed.
+- name: Accountability
+  description: Review monthly cloud spend for the deployment against expected conversation/message volume.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

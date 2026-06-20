@@ -1,0 +1,456 @@
+{
+  "item": [
+    {
+      "id": "f1a0c2e1-0001-4a10-9a01-aa0000000001",
+      "name": "Users",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f1a0c2e1-0001-4a10-9a01-aa0000000002",
+          "name": "Retrieve the authenticated user",
+          "request": {
+            "name": "Retrieve the authenticated user",
+            "description": {
+              "content": "Returns information about the user that owns the API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": ["api", "v1", "me"],
+              "host": ["{{baseUrl}}"],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "method": "GET"
+          },
+          "response": []
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "f1a0c2e1-0002-4a10-9a01-aa0000000010",
+      "name": "Conversations",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f1a0c2e1-0002-4a10-9a01-aa0000000011",
+          "name": "List conversations",
+          "request": {
+            "name": "List conversations",
+            "description": {
+              "content": "Lists conversations, filterable by status, priority, customer_id, and assignee_id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": ["api", "v1", "conversations"],
+              "host": ["{{baseUrl}}"],
+              "query": [
+                { "key": "status", "value": "", "disabled": true },
+                { "key": "priority", "value": "", "disabled": true },
+                { "key": "customer_id", "value": "", "disabled": true },
+                { "key": "assignee_id", "value": "", "disabled": true }
+              ],
+              "variable": []
+            },
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "method": "GET"
+          },
+          "response": []
+        },
+        {
+          "id": "f1a0c2e1-0002-4a10-9a01-aa0000000012",
+          "name": "Create a conversation",
+          "request": {
+            "name": "Create a conversation",
+            "description": {
+              "content": "Create a new conversation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": ["api", "v1", "conversations"],
+              "host": ["{{baseUrl}}"],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"conversation\": {\n    \"customer_id\": \"\",\n    \"status\": \"open\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "id": "f1a0c2e1-0002-4a10-9a01-aa0000000013",
+          "name": "Retrieve a conversation",
+          "request": {
+            "name": "Retrieve a conversation",
+            "description": {
+              "content": "Retrieve a specific conversation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": ["api", "v1", "conversations", ":id"],
+              "host": ["{{baseUrl}}"],
+              "query": [],
+              "variable": [
+                { "key": "id", "value": "" }
+              ]
+            },
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "method": "GET"
+          },
+          "response": []
+        },
+        {
+          "id": "f1a0c2e1-0002-4a10-9a01-aa0000000014",
+          "name": "Update a conversation",
+          "request": {
+            "name": "Update a conversation",
+            "description": {
+              "content": "Update conversation status, priority, or assignee.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": ["api", "v1", "conversations", ":id"],
+              "host": ["{{baseUrl}}"],
+              "query": [],
+              "variable": [
+                { "key": "id", "value": "" }
+              ]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"conversation\": {\n    \"status\": \"closed\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "id": "f1a0c2e1-0002-4a10-9a01-aa0000000015",
+          "name": "Delete a conversation",
+          "request": {
+            "name": "Delete a conversation",
+            "description": {
+              "content": "Delete a conversation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": ["api", "v1", "conversations", ":id"],
+              "host": ["{{baseUrl}}"],
+              "query": [],
+              "variable": [
+                { "key": "id", "value": "" }
+              ]
+            },
+            "header": [],
+            "method": "DELETE"
+          },
+          "response": []
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "f1a0c2e1-0003-4a10-9a01-aa0000000020",
+      "name": "Messages",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f1a0c2e1-0003-4a10-9a01-aa0000000021",
+          "name": "List messages",
+          "request": {
+            "name": "List messages",
+            "description": {
+              "content": "List messages, optionally filtered by conversation_id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": ["api", "v1", "messages"],
+              "host": ["{{baseUrl}}"],
+              "query": [
+                { "key": "conversation_id", "value": "", "disabled": true }
+              ],
+              "variable": []
+            },
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "method": "GET"
+          },
+          "response": []
+        },
+        {
+          "id": "f1a0c2e1-0003-4a10-9a01-aa0000000022",
+          "name": "Create a message",
+          "request": {
+            "name": "Create a message",
+            "description": {
+              "content": "Create a message in a conversation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": ["api", "v1", "messages"],
+              "host": ["{{baseUrl}}"],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": {\n    \"body\": \"\",\n    \"conversation_id\": \"\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "id": "f1a0c2e1-0003-4a10-9a01-aa0000000023",
+          "name": "Retrieve a message",
+          "request": {
+            "name": "Retrieve a message",
+            "description": {
+              "content": "Retrieve a specific message.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": ["api", "v1", "messages", ":id"],
+              "host": ["{{baseUrl}}"],
+              "query": [],
+              "variable": [
+                { "key": "id", "value": "" }
+              ]
+            },
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "method": "GET"
+          },
+          "response": []
+        },
+        {
+          "id": "f1a0c2e1-0003-4a10-9a01-aa0000000024",
+          "name": "Delete a message",
+          "request": {
+            "name": "Delete a message",
+            "description": {
+              "content": "Delete a message.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": ["api", "v1", "messages", ":id"],
+              "host": ["{{baseUrl}}"],
+              "query": [],
+              "variable": [
+                { "key": "id", "value": "" }
+              ]
+            },
+            "header": [],
+            "method": "DELETE"
+          },
+          "response": []
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "f1a0c2e1-0004-4a10-9a01-aa0000000030",
+      "name": "Customers",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f1a0c2e1-0004-4a10-9a01-aa0000000031",
+          "name": "List customers",
+          "request": {
+            "name": "List customers",
+            "description": {
+              "content": "List customers, filterable by name, email, host, and company_id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": ["api", "v1", "customers"],
+              "host": ["{{baseUrl}}"],
+              "query": [
+                { "key": "name", "value": "", "disabled": true },
+                { "key": "email", "value": "", "disabled": true },
+                { "key": "host", "value": "", "disabled": true },
+                { "key": "company_id", "value": "", "disabled": true }
+              ],
+              "variable": []
+            },
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "method": "GET"
+          },
+          "response": []
+        },
+        {
+          "id": "f1a0c2e1-0004-4a10-9a01-aa0000000032",
+          "name": "Create a customer",
+          "request": {
+            "name": "Create a customer",
+            "description": {
+              "content": "Create a customer record.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": ["api", "v1", "customers"],
+              "host": ["{{baseUrl}}"],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer\": {\n    \"name\": \"\",\n    \"email\": \"\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "id": "f1a0c2e1-0004-4a10-9a01-aa0000000033",
+          "name": "Retrieve a customer",
+          "request": {
+            "name": "Retrieve a customer",
+            "description": {
+              "content": "Retrieve a specific customer.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": ["api", "v1", "customers", ":id"],
+              "host": ["{{baseUrl}}"],
+              "query": [],
+              "variable": [
+                { "key": "id", "value": "" }
+              ]
+            },
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "method": "GET"
+          },
+          "response": []
+        },
+        {
+          "id": "f1a0c2e1-0004-4a10-9a01-aa0000000034",
+          "name": "Update a customer",
+          "request": {
+            "name": "Update a customer",
+            "description": {
+              "content": "Update customer information.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": ["api", "v1", "customers", ":id"],
+              "host": ["{{baseUrl}}"],
+              "query": [],
+              "variable": [
+                { "key": "id", "value": "" }
+              ]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer\": {\n    \"name\": \"\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "id": "f1a0c2e1-0004-4a10-9a01-aa0000000035",
+          "name": "Delete a customer",
+          "request": {
+            "name": "Delete a customer",
+            "description": {
+              "content": "Delete a customer.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": ["api", "v1", "customers", ":id"],
+              "host": ["{{baseUrl}}"],
+              "query": [],
+              "variable": [
+                { "key": "id", "value": "" }
+              ]
+            },
+            "header": [],
+            "method": "DELETE"
+          },
+          "response": []
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.papercups.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "f1a0c2e1-0000-4a10-9a01-aa0000000000",
+    "name": "Papercups API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Papercups REST API (conversations, messages, customers, users). Self-hosted open-source customer-messaging platform; in maintenance mode. Auth via Bearer API key.",
+      "type": "text/plain"
+    }
+  }
+}

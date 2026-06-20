@@ -1,0 +1,233 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Papercups API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Users",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve the authenticated user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.papercups.io/api/v1/me"
+          },
+          "docs": "Returns information about the user that owns the API key."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Conversations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List conversations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.papercups.io/api/v1/conversations"
+          },
+          "docs": "Lists conversations, filterable by status, priority, customer_id, and assignee_id."
+        },
+        {
+          "info": {
+            "name": "Create a conversation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.papercups.io/api/v1/conversations",
+            "body": {
+              "type": "json",
+              "data": "{\"conversation\":{\"customer_id\":\"\",\"status\":\"open\"}}"
+            }
+          },
+          "docs": "Create a new conversation."
+        },
+        {
+          "info": {
+            "name": "Retrieve a conversation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.papercups.io/api/v1/conversations/:id"
+          },
+          "docs": "Retrieve a specific conversation."
+        },
+        {
+          "info": {
+            "name": "Update a conversation",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.papercups.io/api/v1/conversations/:id",
+            "body": {
+              "type": "json",
+              "data": "{\"conversation\":{\"status\":\"closed\"}}"
+            }
+          },
+          "docs": "Update conversation status, priority, or assignee."
+        },
+        {
+          "info": {
+            "name": "Delete a conversation",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.papercups.io/api/v1/conversations/:id"
+          },
+          "docs": "Delete a conversation."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Messages",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List messages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.papercups.io/api/v1/messages"
+          },
+          "docs": "List messages, optionally filtered by conversation_id."
+        },
+        {
+          "info": {
+            "name": "Create a message",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.papercups.io/api/v1/messages",
+            "body": {
+              "type": "json",
+              "data": "{\"message\":{\"body\":\"\",\"conversation_id\":\"\"}}"
+            }
+          },
+          "docs": "Create a message in a conversation."
+        },
+        {
+          "info": {
+            "name": "Retrieve a message",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.papercups.io/api/v1/messages/:id"
+          },
+          "docs": "Retrieve a specific message."
+        },
+        {
+          "info": {
+            "name": "Delete a message",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.papercups.io/api/v1/messages/:id"
+          },
+          "docs": "Delete a message."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Customers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List customers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.papercups.io/api/v1/customers"
+          },
+          "docs": "List customers, filterable by name, email, host, and company_id."
+        },
+        {
+          "info": {
+            "name": "Create a customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.papercups.io/api/v1/customers",
+            "body": {
+              "type": "json",
+              "data": "{\"customer\":{\"name\":\"\",\"email\":\"\"}}"
+            }
+          },
+          "docs": "Create a customer record."
+        },
+        {
+          "info": {
+            "name": "Retrieve a customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.papercups.io/api/v1/customers/:id"
+          },
+          "docs": "Retrieve a specific customer."
+        },
+        {
+          "info": {
+            "name": "Update a customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.papercups.io/api/v1/customers/:id",
+            "body": {
+              "type": "json",
+              "data": "{\"customer\":{\"name\":\"\"}}"
+            }
+          },
+          "docs": "Update customer information."
+        },
+        {
+          "info": {
+            "name": "Delete a customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.papercups.io/api/v1/customers/:id"
+          },
+          "docs": "Delete a customer."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

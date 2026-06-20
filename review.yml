@@ -1,0 +1,101 @@
+aid: papercups
+name: Papercups
+review:
+  question: Does Papercups expose a documented public WebSocket API?
+  answer: true
+  date: '2026-06-20'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: true
+  asyncapiScopeNote: |
+    Papercups exposes a genuine bidirectional WebSocket surface via Phoenix
+    Channels for realtime live chat. An AsyncAPI 2.6 document was created at
+    asyncapi/papercups-asyncapi.yml modeling the Phoenix Channels socket at
+    wss://app.papercups.io/socket/websocket, the conversation / conversation
+    lobby / account room channels, and the shout, messages:seen, presence,
+    and heartbeat events. This is a true WebSocket (wss) transport, not SSE.
+findings:
+  summary: |
+    Papercups is an open-source (MIT) customer-messaging / live-chat platform
+    built on Elixir/Phoenix, positioned as a self-hosted alternative to
+    Intercom. It exposes a documented REST API under /api/v1 on
+    https://app.papercups.io (and on any self-hosted host) for conversations,
+    messages, customers, and the authenticated user, secured with a Bearer API
+    key from the dashboard. It also exposes a real bidirectional WebSocket
+    surface via Phoenix Channels for realtime chat, plus outbound webhooks for
+    event subscriptions. The project is in MAINTENANCE MODE: per its GitHub
+    README, "there won't be any major new features in the near future. We will
+    still accept pull requests and conduct major bug fixes." It is
+    community-maintained and less actively developed than commercial
+    alternatives.
+  maintenanceStatus:
+    state: maintenance-mode
+    note: >-
+      Community-maintained; no major new features planned. Bug fixes and PRs
+      still accepted. License is MIT. Hosted SaaS availability/pricing is not
+      reliably published.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://app.papercups.io/api/v1
+      documented: true
+    - protocol: WebSocket
+      scheme: wss
+      baseURL: wss://app.papercups.io/socket/websocket
+      documented: true
+      note: Phoenix Channels realtime chat (conversation, lobby, and room channels) with shout/messages:seen/presence/heartbeat events. True bidirectional WebSocket.
+    - protocol: Webhooks
+      scheme: https
+      documented: true
+      note: Outbound event subscriptions POSTed as { event, payload } JSON, with a webhook:verify challenge handshake on registration.
+  endpointsConfirmedRest:
+    - GET    https://app.papercups.io/api/v1/me
+    - GET    https://app.papercups.io/api/v1/conversations
+    - POST   https://app.papercups.io/api/v1/conversations
+    - GET    https://app.papercups.io/api/v1/conversations/{id}
+    - PUT    https://app.papercups.io/api/v1/conversations/{id}
+    - DELETE https://app.papercups.io/api/v1/conversations/{id}
+    - GET    https://app.papercups.io/api/v1/messages
+    - POST   https://app.papercups.io/api/v1/messages
+    - GET    https://app.papercups.io/api/v1/messages/{id}
+    - DELETE https://app.papercups.io/api/v1/messages/{id}
+    - GET    https://app.papercups.io/api/v1/customers
+    - POST   https://app.papercups.io/api/v1/customers
+    - GET    https://app.papercups.io/api/v1/customers/{id}
+    - PUT    https://app.papercups.io/api/v1/customers/{id}
+    - DELETE https://app.papercups.io/api/v1/customers/{id}
+  channelsConfirmedWebSocket:
+    - 'conversation:{conversation_id} (events: shout, messages:seen)'
+    - 'conversation:lobby:{customer_id} (new-conversation notifications)'
+    - 'room:{account_id} (Phoenix Presence agent availability)'
+    - 'phoenix (heartbeat keepalive)'
+  webhookEvents:
+    - 'webhook:verify (challenge handshake)'
+    - 'message:created'
+    - 'conversation:created'
+    - 'conversation:updated'
+sources:
+  - url: https://docs.papercups.io/api-endpoints
+    type: APIReference
+    note: Documents REST endpoints under /api/v1 with Bearer API key auth.
+  - url: https://docs.papercups.io/chat
+    type: Documentation
+    note: Chat widget and realtime setup; Phoenix Channels WebSocket transport.
+  - url: https://github.com/papercups-io/papercups
+    type: GitHub
+    note: Source of record; README states maintenance mode; Elixir/Phoenix stack.
+  - url: https://github.com/papercups-io/papercups/wiki/Event-Subscriptions-with-Webhooks
+    type: Documentation
+    note: Webhook event subscriptions and webhook:verify challenge flow.
+  - url: https://github.com/papercups-io/papercups-node
+    type: GitHub
+    note: Official Node client confirming conversations/messages/customers/users methods.
+actions:
+  asyncapiPath: asyncapi/papercups-asyncapi.yml
+  apisYmlUpdated: true
+  reason: |
+    Papercups exposes a real, documented bidirectional WebSocket surface via
+    Phoenix Channels for live chat. An AsyncAPI 2.6 document was authored to
+    model the socket, channels, and events accurately, and the realtime chat
+    API was added to apis.yml. Maintenance-mode status is recorded across the
+    plans, rate-limits, finops, and apis.yml artifacts so the catalog reflects
+    the project's current activity level honestly.
