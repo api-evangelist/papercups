@@ -136,6 +136,10 @@ apis:
     JSON payloads of shape { event, payload }, with a verify-challenge handshake on
     registration.
 common:
+- type: DomainSecurity
+  url: security/papercups-domain-security.yml
+- type: Authentication
+  url: authentication/papercups-authentication.yml
 - type: GitHubOrganization
   url: https://github.com/papercups-io
 - type: LinkedIn

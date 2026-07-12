@@ -1,0 +1,14 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/papercups-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  description: 'Bearer API key (personal API key / token) from the Papercups dashboard, sent
+    as `Authorization: Bearer <API_KEY>`.'
+  sources:
+  - openapi/papercups-openapi.yml
