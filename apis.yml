@@ -136,6 +136,8 @@ apis:
     JSON payloads of shape { event, payload }, with a verify-challenge handshake on
     registration.
 common:
+- type: AgenticAccess
+  url: agentic-access/papercups-agentic-access.yml
 - type: DomainSecurity
   url: security/papercups-domain-security.yml
 - type: Authentication
