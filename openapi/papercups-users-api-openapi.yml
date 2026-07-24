@@ -1,0 +1,83 @@
+openapi: 3.0.1
+info:
+  title: Papercups Conversations Users API
+  description: REST API for Papercups, the open-source customer-messaging and live-chat platform built on Elixir/Phoenix. Covers the documented conversations, messages, and customers resources plus the authenticated user endpoint. Authentication uses a Bearer API key (available from the Papercups dashboard). The hosted instance is at https://app.papercups.io; self-hosted deployments expose the same paths on their own host. Papercups is in maintenance mode (community-maintained).
+  termsOfService: https://papercups.io
+  contact:
+    name: Papercups
+    url: https://github.com/papercups-io/papercups
+  license:
+    name: MIT
+    url: https://github.com/papercups-io/papercups/blob/master/LICENSE
+  version: '1.0'
+servers:
+- url: https://app.papercups.io/api/v1
+  description: Papercups hosted instance
+- url: https://{host}/api/v1
+  description: Self-hosted Papercups instance
+  variables:
+    host:
+      default: app.papercups.io
+      description: Hostname of your self-hosted Papercups deployment
+security:
+- bearerAuth: []
+tags:
+- name: Users
+  description: Authenticated user and team members.
+paths:
+  /me:
+    get:
+      operationId: getCurrentUser
+      tags:
+      - Users
+      summary: Retrieve the authenticated user
+      description: Returns information about the user that owns the API key.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        account_id:
+          type: string
+        role:
+          type: string
+    UserResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/User'
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            status:
+              type: integer
+            message:
+              type: string
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'Bearer API key (personal API key / token) from the Papercups dashboard, sent as `Authorization: Bearer <API_KEY>`.'

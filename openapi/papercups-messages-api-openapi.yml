@@ -1,0 +1,188 @@
+openapi: 3.0.1
+info:
+  title: Papercups Conversations Messages API
+  description: REST API for Papercups, the open-source customer-messaging and live-chat platform built on Elixir/Phoenix. Covers the documented conversations, messages, and customers resources plus the authenticated user endpoint. Authentication uses a Bearer API key (available from the Papercups dashboard). The hosted instance is at https://app.papercups.io; self-hosted deployments expose the same paths on their own host. Papercups is in maintenance mode (community-maintained).
+  termsOfService: https://papercups.io
+  contact:
+    name: Papercups
+    url: https://github.com/papercups-io/papercups
+  license:
+    name: MIT
+    url: https://github.com/papercups-io/papercups/blob/master/LICENSE
+  version: '1.0'
+servers:
+- url: https://app.papercups.io/api/v1
+  description: Papercups hosted instance
+- url: https://{host}/api/v1
+  description: Self-hosted Papercups instance
+  variables:
+    host:
+      default: app.papercups.io
+      description: Hostname of your self-hosted Papercups deployment
+security:
+- bearerAuth: []
+tags:
+- name: Messages
+  description: Individual messages within conversations.
+paths:
+  /messages:
+    get:
+      operationId: listMessages
+      tags:
+      - Messages
+      summary: List messages
+      parameters:
+      - name: conversation_id
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createMessage
+      tags:
+      - Messages
+      summary: Create a message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  $ref: '#/components/schemas/MessageInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /messages/{id}:
+    parameters:
+    - $ref: '#/components/parameters/IdParam'
+    get:
+      operationId: getMessage
+      tags:
+      - Messages
+      summary: Retrieve a message
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteMessage
+      tags:
+      - Messages
+      summary: Delete a message
+      responses:
+        '204':
+          description: No Content
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    MessageResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Message'
+    MessageListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+    MessageInput:
+      type: object
+      required:
+      - body
+      - conversation_id
+      properties:
+        body:
+          type: string
+        conversation_id:
+          type: string
+        customer_id:
+          type: string
+        user_id:
+          type: string
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+        account_id:
+          type: string
+        conversation_id:
+          type: string
+        customer_id:
+          type: string
+          nullable: true
+        user_id:
+          type: string
+          nullable: true
+        body:
+          type: string
+        type:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        seen_at:
+          type: string
+          format: date-time
+          nullable: true
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            status:
+              type: integer
+            message:
+              type: string
+  parameters:
+    IdParam:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Resource identifier (UUID).
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'Bearer API key (personal API key / token) from the Papercups dashboard, sent as `Authorization: Bearer <API_KEY>`.'
