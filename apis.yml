@@ -7,7 +7,20 @@ description: Papercups is an open-source customer-messaging and live-chat platfo
   exposes a REST API for conversations, messages, and customers, a realtime chat surface
   over Phoenix WebSocket channels, and outbound webhooks. The project is in maintenance
   mode (community-maintained, no major new features).
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/papercups.png
 tags:
 - Customer Messaging
 - Live Chat
@@ -18,66 +31,6 @@ created: '2026-06-20'
 modified: '2026-06-20'
 specificationVersion: '0.19'
 apis:
-- aid: papercups:conversations
-  name: Papercups Conversations API
-  tags:
-  - Conversations
-  - Support
-  - Threads
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.papercups.io/api-endpoints
-  baseURL: https://app.papercups.io/api/v1
-  properties:
-  - url: https://docs.papercups.io/api-endpoints
-    type: Documentation
-  - url: https://docs.papercups.io/api-endpoints
-    type: APIReference
-  - url: openapi/papercups-openapi.yml
-    type: OpenAPI
-  - url: https://github.com/papercups-io/papercups
-    type: GitHub
-  description: REST endpoints to create, list, retrieve, update, and delete conversations
-    (threads of messages), with filtering by status, priority, customer, and assignee.
-- aid: papercups:messages
-  name: Papercups Messages API
-  tags:
-  - Messages
-  - Support
-  - Chat
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.papercups.io/api-endpoints
-  baseURL: https://app.papercups.io/api/v1
-  properties:
-  - url: https://docs.papercups.io/api-endpoints
-    type: Documentation
-  - url: https://docs.papercups.io/api-endpoints
-    type: APIReference
-  - url: openapi/papercups-openapi.yml
-    type: OpenAPI
-  - url: https://github.com/papercups-io/papercups
-    type: GitHub
-  description: REST endpoints to create, list, retrieve, and delete messages within
-    conversations, including agent and customer messages and their metadata.
-- aid: papercups:customers
-  name: Papercups Customers API
-  tags:
-  - Customers
-  - Contacts
-  - CRM
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.papercups.io/api-endpoints
-  baseURL: https://app.papercups.io/api/v1
-  properties:
-  - url: https://docs.papercups.io/api-endpoints
-    type: Documentation
-  - url: https://docs.papercups.io/api-endpoints
-    type: APIReference
-  - url: openapi/papercups-openapi.yml
-    type: OpenAPI
-  - url: https://github.com/papercups-io/papercups
-    type: GitHub
-  description: REST endpoints to create, list, retrieve, update, and delete customer
-    records (users, leads, or contacts), filterable by name, email, host, and company.
 - aid: papercups:notifications
   name: Papercups Notifications & Webhooks API
   tags:
@@ -94,9 +47,9 @@ apis:
     type: APIReference
   - url: https://github.com/papercups-io/papercups
     type: GitHub
-  description: Outbound event subscriptions delivered as webhooks (message:created,
-    conversation:created, conversation:updated, and a webhook:verify challenge handshake)
-    notifying external systems of activity.
+  description: >-
+    Outbound event subscriptions delivered as webhooks (message:created, conversation:created, conversation:updated,
+    and a webhook:verify challenge handshake) notifying external systems of activity.
 - aid: papercups:realtime-chat
   name: Papercups Realtime Chat API (WebSocket / Phoenix Channels)
   tags:
@@ -113,9 +66,10 @@ apis:
     type: AsyncAPI
   - url: https://github.com/papercups-io/papercups
     type: GitHub
-  description: Bidirectional realtime live chat over Phoenix WebSocket channels. Clients
-    join conversation, conversation-lobby, and account-room channels and exchange
-    shout (message), messages:seen, and presence events for two-way messaging.
+  description: >-
+    Bidirectional realtime live chat over Phoenix WebSocket channels. Clients join conversation, conversation-lobby,
+    and account-room channels and exchange shout (message), messages:seen, and presence events for two-way
+    messaging.
 - aid: papercups:webhooks
   name: Papercups Webhooks
   tags:
@@ -132,9 +86,73 @@ apis:
     type: APIReference
   - url: https://github.com/papercups-io/webhooks-demo
     type: GitHub
-  description: Register external HTTPS endpoints to receive Papercups events as POSTed
-    JSON payloads of shape { event, payload }, with a verify-challenge handshake on
-    registration.
+  description: >-
+    Register external HTTPS endpoints to receive Papercups events as POSTed JSON payloads of shape { event,
+    payload }, with a verify-challenge handshake on registration.
+- aid: papercups:papercups-conversations-api
+  name: Papercups Conversations API
+  description: Threads of messages between customers and agents.
+  humanURL: https://docs.papercups.io/api-endpoints
+  baseURL: https://app.papercups.io/api/v1
+  tags:
+  - Conversations
+  properties:
+  - type: OpenAPI
+    url: openapi/papercups-conversations-api-openapi.yml
+  - type: Documentation
+    url: https://docs.papercups.io/api-endpoints
+  - type: APIReference
+    url: https://docs.papercups.io/api-endpoints
+  - type: GitHub
+    url: https://github.com/papercups-io/papercups
+- aid: papercups:papercups-customers-api
+  name: Papercups Customers API
+  description: Customer records (users, leads, or contacts).
+  humanURL: https://docs.papercups.io/api-endpoints
+  baseURL: https://app.papercups.io/api/v1
+  tags:
+  - Customers
+  properties:
+  - type: OpenAPI
+    url: openapi/papercups-customers-api-openapi.yml
+  - type: Documentation
+    url: https://docs.papercups.io/api-endpoints
+  - type: APIReference
+    url: https://docs.papercups.io/api-endpoints
+  - type: GitHub
+    url: https://github.com/papercups-io/papercups
+- aid: papercups:papercups-messages-api
+  name: Papercups Messages API
+  description: Individual messages within conversations.
+  humanURL: https://docs.papercups.io/api-endpoints
+  baseURL: https://app.papercups.io/api/v1
+  tags:
+  - Messages
+  properties:
+  - type: OpenAPI
+    url: openapi/papercups-messages-api-openapi.yml
+  - type: Documentation
+    url: https://docs.papercups.io/api-endpoints
+  - type: APIReference
+    url: https://docs.papercups.io/api-endpoints
+  - type: GitHub
+    url: https://github.com/papercups-io/papercups
+- aid: papercups:papercups-users-api
+  name: Papercups Users API
+  description: Authenticated user and team members.
+  humanURL: https://docs.papercups.io/api-endpoints
+  baseURL: https://app.papercups.io/api/v1
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/papercups-users-api-openapi.yml
+  - type: Documentation
+    url: https://docs.papercups.io/api-endpoints
+  - type: APIReference
+    url: https://docs.papercups.io/api-endpoints
+  - type: GitHub
+    url: https://github.com/papercups-io/papercups
 common:
 - type: AgenticAccess
   url: agentic-access/papercups-agentic-access.yml
