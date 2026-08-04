@@ -1,0 +1,592 @@
+openapi: 3.0.1
+info:
+  title: Papercups API
+  description: >-
+    REST API for Papercups, the open-source customer-messaging and live-chat
+    platform built on Elixir/Phoenix. Covers the documented conversations,
+    messages, and customers resources plus the authenticated user endpoint.
+    Authentication uses a Bearer API key (available from the Papercups
+    dashboard). The hosted instance is at https://app.papercups.io; self-hosted
+    deployments expose the same paths on their own host. Papercups is in
+    maintenance mode (community-maintained).
+  termsOfService: https://papercups.io
+  contact:
+    name: Papercups
+    url: https://github.com/papercups-io/papercups
+  license:
+    name: MIT
+    url: https://github.com/papercups-io/papercups/blob/master/LICENSE
+  version: '1.0'
+servers:
+  - url: https://app.papercups.io/api/v1
+    description: Papercups hosted instance
+  - url: https://{host}/api/v1
+    description: Self-hosted Papercups instance
+    variables:
+      host:
+        default: app.papercups.io
+        description: Hostname of your self-hosted Papercups deployment
+security:
+  - bearerAuth: []
+tags:
+  - name: Conversations
+    description: Threads of messages between customers and agents.
+  - name: Messages
+    description: Individual messages within conversations.
+  - name: Customers
+    description: Customer records (users, leads, or contacts).
+  - name: Users
+    description: Authenticated user and team members.
+paths:
+  /me:
+    get:
+      operationId: getCurrentUser
+      tags:
+        - Users
+      summary: Retrieve the authenticated user
+      description: Returns information about the user that owns the API key.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /conversations:
+    get:
+      operationId: listConversations
+      tags:
+        - Conversations
+      summary: List conversations
+      description: >-
+        Lists conversations. Supports filtering by status, priority,
+        customer_id, and assignee_id via query parameters.
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [open, closed]
+        - name: priority
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [priority, not_priority]
+        - name: customer_id
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: assignee_id
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createConversation
+      tags:
+        - Conversations
+      summary: Create a conversation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                conversation:
+                  $ref: '#/components/schemas/ConversationInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /conversations/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      operationId: getConversation
+      tags:
+        - Conversations
+      summary: Retrieve a conversation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateConversation
+      tags:
+        - Conversations
+      summary: Update a conversation
+      description: Update conversation status, priority, or assignee.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                conversation:
+                  $ref: '#/components/schemas/ConversationInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteConversation
+      tags:
+        - Conversations
+      summary: Delete a conversation
+      responses:
+        '204':
+          description: No Content
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /messages:
+    get:
+      operationId: listMessages
+      tags:
+        - Messages
+      summary: List messages
+      parameters:
+        - name: conversation_id
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createMessage
+      tags:
+        - Messages
+      summary: Create a message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  $ref: '#/components/schemas/MessageInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /messages/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      operationId: getMessage
+      tags:
+        - Messages
+      summary: Retrieve a message
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteMessage
+      tags:
+        - Messages
+      summary: Delete a message
+      responses:
+        '204':
+          description: No Content
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /customers:
+    get:
+      operationId: listCustomers
+      tags:
+        - Customers
+      summary: List customers
+      description: Lists customers, filterable by name, email, host, and company_id.
+      parameters:
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: email
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: host
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: company_id
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createCustomer
+      tags:
+        - Customers
+      summary: Create a customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer:
+                  $ref: '#/components/schemas/CustomerInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /customers/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      operationId: getCustomer
+      tags:
+        - Customers
+      summary: Retrieve a customer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateCustomer
+      tags:
+        - Customers
+      summary: Update a customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer:
+                  $ref: '#/components/schemas/CustomerInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteCustomer
+      tags:
+        - Customers
+      summary: Delete a customer
+      responses:
+        '204':
+          description: No Content
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: >-
+        Bearer API key (personal API key / token) from the Papercups
+        dashboard, sent as `Authorization: Bearer <API_KEY>`.
+  parameters:
+    IdParam:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Resource identifier (UUID).
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Conversation:
+      type: object
+      properties:
+        id:
+          type: string
+        account_id:
+          type: string
+        customer_id:
+          type: string
+        assignee_id:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [open, closed]
+        priority:
+          type: string
+          enum: [priority, not_priority]
+        source:
+          type: string
+        read:
+          type: boolean
+        inserted_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    ConversationInput:
+      type: object
+      properties:
+        customer_id:
+          type: string
+        assignee_id:
+          type: string
+        status:
+          type: string
+          enum: [open, closed]
+        priority:
+          type: string
+          enum: [priority, not_priority]
+        source:
+          type: string
+    ConversationResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Conversation'
+    ConversationListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Conversation'
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+        account_id:
+          type: string
+        conversation_id:
+          type: string
+        customer_id:
+          type: string
+          nullable: true
+        user_id:
+          type: string
+          nullable: true
+        body:
+          type: string
+        type:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        seen_at:
+          type: string
+          format: date-time
+          nullable: true
+    MessageInput:
+      type: object
+      required:
+        - body
+        - conversation_id
+      properties:
+        body:
+          type: string
+        conversation_id:
+          type: string
+        customer_id:
+          type: string
+        user_id:
+          type: string
+    MessageResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Message'
+    MessageListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+        account_id:
+          type: string
+        name:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        external_id:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        company_id:
+          type: string
+          nullable: true
+        host:
+          type: string
+          nullable: true
+        current_url:
+          type: string
+          nullable: true
+        browser:
+          type: string
+          nullable: true
+        os:
+          type: string
+          nullable: true
+        metadata:
+          type: object
+          additionalProperties: true
+        first_seen:
+          type: string
+          format: date
+        last_seen_at:
+          type: string
+          format: date-time
+        inserted_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    CustomerInput:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        external_id:
+          type: string
+        phone:
+          type: string
+        company_id:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: true
+    CustomerResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Customer'
+    CustomerListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Customer'
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        account_id:
+          type: string
+        role:
+          type: string
+    UserResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/User'
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            status:
+              type: integer
+            message:
+              type: string
