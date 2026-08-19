@@ -1,0 +1,133 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Papercups Conversations API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Conversations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List conversations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.papercups.io/api/v1/conversations",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "priority",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "customer_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "assignee_id",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Lists conversations. Supports filtering by status, priority, customer_id, and assignee_id via query parameters."
+        },
+        {
+          "info": {
+            "name": "Create a conversation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.papercups.io/api/v1/conversations",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a conversation"
+        },
+        {
+          "info": {
+            "name": "Retrieve a conversation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.papercups.io/api/v1/conversations/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Resource identifier (UUID)."
+              }
+            ]
+          },
+          "docs": "Retrieve a conversation"
+        },
+        {
+          "info": {
+            "name": "Update a conversation",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.papercups.io/api/v1/conversations/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Resource identifier (UUID)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update conversation status, priority, or assignee."
+        },
+        {
+          "info": {
+            "name": "Delete a conversation",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.papercups.io/api/v1/conversations/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Resource identifier (UUID)."
+              }
+            ]
+          },
+          "docs": "Delete a conversation"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
