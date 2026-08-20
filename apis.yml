@@ -24,6 +24,12 @@ image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/papercups.
 tags:
 - Customer Messaging
 - Live Chat
+- Open-Source
+- Support
+- Intercom Alternative
+tags_raw:
+- Customer Messaging
+- Live Chat
 - Open Source
 - Support
 - Intercom Alternative
@@ -34,6 +40,10 @@ apis:
 - aid: papercups:notifications
   name: Papercups Notifications & Webhooks API
   tags:
+  - Webhook
+  - Notification
+  - Event
+  tags_raw:
   - Webhooks
   - Notifications
   - Events
@@ -53,6 +63,10 @@ apis:
 - aid: papercups:realtime-chat
   name: Papercups Realtime Chat API (WebSocket / Phoenix Channels)
   tags:
+  - Real-Time
+  - WebSocket
+  - Phoenix Channels
+  tags_raw:
   - Realtime
   - WebSocket
   - Phoenix Channels
@@ -73,6 +87,10 @@ apis:
 - aid: papercups:webhooks
   name: Papercups Webhooks
   tags:
+  - Webhook
+  - Event
+  - Integration
+  tags_raw:
   - Webhooks
   - Events
   - Integrations
@@ -127,6 +145,8 @@ apis:
   humanURL: https://docs.papercups.io/api-endpoints
   baseURL: https://app.papercups.io/api/v1
   tags:
+  - Message
+  tags_raw:
   - Messages
   properties:
   - type: OpenAPI
@@ -143,6 +163,8 @@ apis:
   humanURL: https://docs.papercups.io/api-endpoints
   baseURL: https://app.papercups.io/api/v1
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
