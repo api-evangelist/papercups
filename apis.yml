@@ -7,6 +7,18 @@ description: Papercups is an open-source customer-messaging and live-chat platfo
   exposes a REST API for conversations, messages, and customers, a realtime chat surface
   over Phoenix WebSocket channels, and outbound webhooks. The project is in maintenance
   mode (community-maintained, no major new features).
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: self-serve
