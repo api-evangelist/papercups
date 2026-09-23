@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Papercups Conversations Messages API
+  title: Papercups Messages API
   description: REST API for Papercups, the open-source customer-messaging and live-chat platform built on Elixir/Phoenix. Covers the documented conversations, messages, and customers resources plus the authenticated user endpoint. Authentication uses a Bearer API key (available from the Papercups dashboard). The hosted instance is at https://app.papercups.io; self-hosted deployments expose the same paths on their own host. Papercups is in maintenance mode (community-maintained).
   termsOfService: https://papercups.io
   contact:
@@ -97,32 +97,36 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  responses:
-    Unauthorized:
-      description: Missing or invalid API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    MessageResponse:
+    Message:
       type: object
       properties:
-        data:
-          $ref: '#/components/schemas/Message'
-    MessageListResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
+        id:
+          type: string
+        account_id:
+          type: string
+        conversation_id:
+          type: string
+        customer_id:
+          type:
+          - string
+          - 'null'
+        user_id:
+          type:
+          - string
+          - 'null'
+        body:
+          type: string
+        type:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        seen_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
     MessageInput:
       type: object
       required:
@@ -137,32 +141,6 @@ components:
           type: string
         user_id:
           type: string
-    Message:
-      type: object
-      properties:
-        id:
-          type: string
-        account_id:
-          type: string
-        conversation_id:
-          type: string
-        customer_id:
-          type: string
-          nullable: true
-        user_id:
-          type: string
-          nullable: true
-        body:
-          type: string
-        type:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        seen_at:
-          type: string
-          format: date-time
-          nullable: true
     Error:
       type: object
       properties:
@@ -173,6 +151,31 @@ components:
               type: integer
             message:
               type: string
+    MessageListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+    MessageResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Message'
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     IdParam:
       name: id

@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
   title: Papercups Conversations API
   description: REST API for Papercups, the open-source customer-messaging and live-chat platform built on Elixir/Phoenix. Covers the documented conversations, messages, and customers resources plus the authenticated user endpoint. Authentication uses a Bearer API key (available from the Papercups dashboard). The hosted instance is at https://app.papercups.io; self-hosted deployments expose the same paths on their own host. Papercups is in maintenance mode (community-maintained).
@@ -143,59 +143,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  responses:
-    Unauthorized:
-      description: Missing or invalid API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    ConversationListResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Conversation'
-    Conversation:
-      type: object
-      properties:
-        id:
-          type: string
-        account_id:
-          type: string
-        customer_id:
-          type: string
-        assignee_id:
-          type: string
-          nullable: true
-        status:
-          type: string
-          enum:
-          - open
-          - closed
-        priority:
-          type: string
-          enum:
-          - priority
-          - not_priority
-        source:
-          type: string
-        read:
-          type: boolean
-        inserted_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
     ConversationInput:
       type: object
       properties:
@@ -220,6 +168,46 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/Conversation'
+    Conversation:
+      type: object
+      properties:
+        id:
+          type: string
+        account_id:
+          type: string
+        customer_id:
+          type: string
+        assignee_id:
+          type:
+          - string
+          - 'null'
+        status:
+          type: string
+          enum:
+          - open
+          - closed
+        priority:
+          type: string
+          enum:
+          - priority
+          - not_priority
+        source:
+          type: string
+        read:
+          type: boolean
+        inserted_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    ConversationListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Conversation'
     Error:
       type: object
       properties:
@@ -230,6 +218,19 @@ components:
               type: integer
             message:
               type: string
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     IdParam:
       name: id
