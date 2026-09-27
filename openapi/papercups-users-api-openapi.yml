@@ -43,6 +43,17 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        account_id:
+          type: string
+        role:
+          type: string
     Error:
       type: object
       properties:
@@ -58,17 +69,6 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/User'
-    User:
-      type: object
-      properties:
-        id:
-          type: string
-        email:
-          type: string
-        account_id:
-          type: string
-        role:
-          type: string
   responses:
     Unauthorized:
       description: Missing or invalid API key

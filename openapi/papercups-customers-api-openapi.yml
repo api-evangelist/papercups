@@ -137,6 +137,32 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    CustomerInput:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        external_id:
+          type: string
+        phone:
+          type: string
+        company_id:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: true
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            status:
+              type: integer
+            message:
+              type: string
     CustomerListResponse:
       type: object
       properties:
@@ -202,32 +228,6 @@ components:
         updated_at:
           type: string
           format: date-time
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            status:
-              type: integer
-            message:
-              type: string
-    CustomerInput:
-      type: object
-      properties:
-        name:
-          type: string
-        email:
-          type: string
-        external_id:
-          type: string
-        phone:
-          type: string
-        company_id:
-          type: string
-        metadata:
-          type: object
-          additionalProperties: true
     CustomerResponse:
       type: object
       properties:

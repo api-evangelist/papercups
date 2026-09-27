@@ -98,6 +98,42 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    MessageListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+    MessageInput:
+      type: object
+      required:
+      - body
+      - conversation_id
+      properties:
+        body:
+          type: string
+        conversation_id:
+          type: string
+        customer_id:
+          type: string
+        user_id:
+          type: string
+    MessageResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Message'
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            status:
+              type: integer
+            message:
+              type: string
     Message:
       type: object
       properties:
@@ -127,42 +163,6 @@ components:
           - string
           - 'null'
           format: date-time
-    MessageInput:
-      type: object
-      required:
-      - body
-      - conversation_id
-      properties:
-        body:
-          type: string
-        conversation_id:
-          type: string
-        customer_id:
-          type: string
-        user_id:
-          type: string
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            status:
-              type: integer
-            message:
-              type: string
-    MessageListResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
-    MessageResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/Message'
   responses:
     NotFound:
       description: Resource not found

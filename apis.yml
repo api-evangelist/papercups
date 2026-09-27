@@ -8,16 +8,22 @@ description: Papercups is an open-source customer-messaging and live-chat platfo
   over Phoenix WebSocket channels, and outbound webhooks. The project is in maintenance
   mode (community-maintained, no major new features).
 deliveryModel:
-  model: saas
-  open_source: false
+  model: open-core
+  license: MIT
+  license_evidence:
+    repo: papercups-io/papercups
+    spdx: MIT
+    stars: 6115
+  open_source: true
   commercial: true
   callable_host: false
-  label: Hosted service · you call their endpoint
+  label: Open core · an OSS project plus a commercial hosted product
   confidence: medium
   source:
   - openapi
   - pricing
-  generated: '2026-08-28'
+  - repository-license
+  generated: '2026-09-25'
   method: derived
 accessModel:
   pricing: freemium
@@ -37,15 +43,18 @@ image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/papercups.
 tags:
 - Customer Messaging
 - Live Chat
-- Open-Source
+- Open Source
 - Support
 - Intercom Alternative
+- Real-Time
 tags_raw:
 - Customer Messaging
 - Live Chat
 - Open Source
 - Support
 - Intercom Alternative
+- Open-Source
+- Real-Time
 created: '2026-06-20'
 modified: '2026-06-20'
 specificationVersion: '0.23'
