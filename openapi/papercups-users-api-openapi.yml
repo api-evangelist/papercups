@@ -43,6 +43,16 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            status:
+              type: integer
+            message:
+              type: string
     User:
       type: object
       properties:
@@ -54,16 +64,6 @@ components:
           type: string
         role:
           type: string
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            status:
-              type: integer
-            message:
-              type: string
     UserResponse:
       type: object
       properties:

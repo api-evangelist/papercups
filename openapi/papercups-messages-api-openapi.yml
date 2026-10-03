@@ -97,33 +97,28 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    IdParam:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Resource identifier (UUID).
   schemas:
-    MessageListResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
-    MessageInput:
-      type: object
-      required:
-      - body
-      - conversation_id
-      properties:
-        body:
-          type: string
-        conversation_id:
-          type: string
-        customer_id:
-          type: string
-        user_id:
-          type: string
-    MessageResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/Message'
     Error:
       type: object
       properties:
@@ -163,27 +158,32 @@ components:
           - string
           - 'null'
           format: date-time
-  responses:
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-  parameters:
-    IdParam:
-      name: id
-      in: path
-      required: true
-      schema:
-        type: string
-      description: Resource identifier (UUID).
+    MessageResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Message'
+    MessageInput:
+      type: object
+      required:
+      - body
+      - conversation_id
+      properties:
+        body:
+          type: string
+        conversation_id:
+          type: string
+        customer_id:
+          type: string
+        user_id:
+          type: string
+    MessageListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
   securitySchemes:
     bearerAuth:
       type: http
