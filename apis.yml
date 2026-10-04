@@ -198,6 +198,9 @@ apis:
   - type: GitHub
     url: https://github.com/papercups-io/papercups
 common:
+- type: CapabilityMap
+  url: capabilities/papercups-capability-edges.yml
+  name: Papercups Business Capability Map
 - type: AgenticAccess
   url: agentic-access/papercups-agentic-access.yml
 - type: DomainSecurity

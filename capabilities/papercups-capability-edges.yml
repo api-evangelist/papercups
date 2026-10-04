@@ -1,0 +1,36 @@
+slug: papercups
+provider: Papercups
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 2
+edges:
+- tag: Conversations
+  spec_file: papercups-conversations-api-openapi.yml
+  capability_id: BC-430.10
+  capability_id_l1: BC-430
+  capability_name: Customer Inquiry Management
+  confidence: 0.8
+  evidence: '"open-source customer-messaging and live-chat platform" with "List conversations", "Create
+    a conversation"'
+  reason: Conversations here are customer support chat threads on a live-chat platform, which realises
+    inbound customer contact handling. Sub-capability choice between inquiry management and contact-centre
+    operations carries mild ambiguity.
+- tag: Messages
+  spec_file: papercups-messages-api-openapi.yml
+  capability_id: BC-430.10
+  capability_id_l1: BC-430
+  capability_name: Customer Inquiry Management
+  confidence: 0.75
+  evidence: '"List messages", "Create a message" on a platform described as "live-chat platform ... alternative
+    to Intercom"'
+  reason: Messages are the individual customer-support chat messages exchanged with customers, supporting
+    inbound contact handling and resolution.
