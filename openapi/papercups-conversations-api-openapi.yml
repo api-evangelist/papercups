@@ -164,21 +164,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Conversation'
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            status:
-              type: integer
-            message:
-              type: string
-    ConversationResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/Conversation'
     ConversationInput:
       type: object
       properties:
@@ -198,6 +183,11 @@ components:
           - not_priority
         source:
           type: string
+    ConversationResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Conversation'
     Conversation:
       type: object
       properties:
@@ -231,6 +221,16 @@ components:
         updated_at:
           type: string
           format: date-time
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            status:
+              type: integer
+            message:
+              type: string
   parameters:
     IdParam:
       name: id

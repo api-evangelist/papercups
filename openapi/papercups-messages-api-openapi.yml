@@ -110,25 +110,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    IdParam:
-      name: id
-      in: path
-      required: true
-      schema:
-        type: string
-      description: Resource identifier (UUID).
   schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            status:
-              type: integer
-            message:
-              type: string
     Message:
       type: object
       properties:
@@ -158,11 +140,6 @@ components:
           - string
           - 'null'
           format: date-time
-    MessageResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/Message'
     MessageInput:
       type: object
       required:
@@ -184,6 +161,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Message'
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            status:
+              type: integer
+            message:
+              type: string
+    MessageResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Message'
+  parameters:
+    IdParam:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Resource identifier (UUID).
   securitySchemes:
     bearerAuth:
       type: http
